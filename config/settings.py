@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # 3d party
     # local apps
     'users.apps.UsersConfig',
+    'pages.apps.PagesConfig',
+    'products.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,8 +128,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'statifiles'
-STATID_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_DIRS = [BASE_DIR / 'static']
 
 # User Model
 AUTH_USER_MODEL = 'users.User'
+
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
