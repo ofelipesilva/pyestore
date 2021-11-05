@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3d party
     'debug_toolbar',
-    # local apps
+    'widget_tweaks',
+    # my apps
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'products.apps.ProductsConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +149,8 @@ import socket # noqa
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + '1' for ip in ips]
+
+
+# Cart
+CART_SESSION_ID = 'cart'
+CART_ITEM_MAX_QUANTITY = 20

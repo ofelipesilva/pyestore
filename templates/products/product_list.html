@@ -65,8 +65,8 @@ Produtos
                 {% endif %}
             </div>
 
-            {% if is_paginated %}
-            {% include "pagination.html" with page=page_obj %}
+            {% if product_list.has_other_pages %}
+            {% include "pagination.html" with page=product_list %}
             {% endif %}
         </div>
     </div>

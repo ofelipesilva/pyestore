@@ -1,45 +1,39 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import redirect, render, get_object_or_404
+from django.core.paginator import Paginator
 
 from .models import Category, Product
+from cart.forms import CartAddProductForm
 
 
-# def products_list(request):
-#     category = None
-#     paginated_by = 6
-    
-#     queryset = Product.available.all()
-
-#     data = {
-#         products: 'queryset'
-#     }
-
-#     return render(request, '', data)
-
-
-# def product_detail(request, product_slug):
-#     pass
-
-class ProductDetailView(DetailView):
+def products_list(request, slug=None):
+    category = None
     queryset = Product.available.all()
 
 
-class ProductListView(ListView):
-    category = None
-    paginate_by = 6
+    if slug:
+        category = get_object_or_404(Category, slug=slug)
+        queryset = Product.available.filter(category=category)
 
-    def get_queryset(self):
-        queryset = Product.available.all()
+    paginator = Paginator(queryset, 6)
 
-        category_slug = self.kwargs.get("slug")
-        if category_slug:
-            self.category = get_object_or_404(Category, slug=category_slug)
-            queryset = queryset.filter(category=self.category)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-        return queryset
+    data = {
+        'categories': Category.objects.all(),
+        'category': category,
+        'product_list': page_obj
+    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["category"] = self.category
-        context["categories"] = Category.objects.all()
-        return context
+    return render(request, 'products/product_list.html', data)
+
+def product_detail(request, slug):
+    produto = get_object_or_404(Product, slug=slug)
+    if produto:
+        data = {
+            'product': produto,
+            'form': CartAddProductForm()
+        }
+        return render(request, 'products/product_detail.html', data)
+    
+    redirect('products:product_list')
